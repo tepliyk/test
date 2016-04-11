@@ -1,195 +1,177 @@
 <html>
- <head>
-<meta charset="UTF-8">
-  <title> PRICE </title>
+<head>
+    <meta charset="UTF-8">
+    <title> PRICE </title>
 </head>
 <body>
 
- <a href="index.php?sync=1"><img src="sync.png" alt="sync" width="150" height="150" /></a>
+<a href="index.php?sync=1"><img src="sync.png" alt="sync" width="150" height="150"/></a>
 
 <?php
 
 
-//старт подсчета времени
+//пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 $start = microtime(true);
 
 
-
-
-
-$link_array = array( 
-'http://soccer-shop.com.ua/c7-myachi_dlya_futbola/filter/m-3', 
-'http://soccer-shop.com.ua/c8-myachi_dlya_futzala/filter/m-3',
-'http://soccer-shop.com.ua/c7-myachi_dlya_futbola/filter/m-5',
-'http://soccer-shop.com.ua/c8-myachi_dlya_futzala/filter/m-5'
+$link_array = array(
+    'http://soccer-shop.com.ua/c7-myachi_dlya_futbola/filter/m-3',
+    'http://soccer-shop.com.ua/c8-myachi_dlya_futzala/filter/m-3',
+    'http://soccer-shop.com.ua/c7-myachi_dlya_futbola/filter/m-5',
+    'http://soccer-shop.com.ua/c8-myachi_dlya_futzala/filter/m-5'
 );
 
 
-//Проверка на нажатие кнопки синхронизации
+//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 if (isset($_GET['sync'])) {
     $sync = 0;
 }
 
-//подгружаем библиотеку
+//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 include_once('simple_html_dom.php');
 
-$dblocation = "goal01.mysql.ukraine.com.ua"; // Имя сервера
-$dbuser = "goal01_db";          // Имя пользователя
-$dbpasswd = "xVStkZXA";            // Пароль
-$dbcnx = @mysql_connect($dblocation,$dbuser,$dbpasswd);
+$dblocation = "goal01.mysql.ukraine.com.ua"; // пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+$dbuser = "goal01_db";          // пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+$dbpasswd = "xVStkZXA";            // пїЅпїЅпїЅпїЅпїЅпїЅ
+$dbcnx = @mysql_connect($dblocation, $dbuser, $dbpasswd);
 
-if (!$dbcnx) // Если дескриптор равен 0 соединение не установлено
+if (!$dbcnx) // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 0 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 {
-  echo("<P>Server no find</P>");
-  exit();
+    echo("<P>Server no find</P>");
+    exit();
 }
 
-// Выбор БД 
+// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ 
 mysql_select_db("goal01_db") or die(mysql_error());
 
 echo " <table border='1' width='100%'> <tr> ";
 
-//Перебор ссылок
-for ($j = 0; $j <= count($link_array)-1; $j++) 
-{
+//пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+for ($j = 0; $j <= count($link_array) - 1; $j++) {
 
-echo "<td valign='top'>";
-echo " <table border='1' width='480px'> ";
+    echo "<td valign='top'>";
+    echo " <table border='1' width='480px'> ";
 
-//создаём новый объект
-$html = new simple_html_dom();
-	
-// Создать DOM из URL или файла
-$html = file_get_html($link_array[$j]);
-	
-//для определения артикла товара
-$product_sku = $html->find('.prodModel');
+//пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+    $html = new simple_html_dom();
 
-//для определения статуса товара
-$prod = $html->find('.prod-in');
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ DOM пїЅпїЅ URL пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
+    $html = file_get_html($link_array[$j]);
 
-//Находим все названия товаров
-$name = $html->find('.products-name');	
+//пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+    $product_sku = $html->find('.prodModel');
 
-//Находим все цены товаров
-$price = $html->find('.int');
+//пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+    $prod = $html->find('.prod-in');
 
-$num=0;
+//пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+    $name = $html->find('.products-name');
 
-for ($i = 0; $i <= count($name)-1; $i++) 
-{ 
+//пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+    $price = $html->find('.int');
 
-// Определение статуса товара
-$prod_new=strip_tags(html_entity_decode($prod[$i]));
-$prod_new=trim($prod_new);
-$status = substr($prod_new, 1, 1);
-$status=ord($status);
+    $num = 0;
 
-if ($status==156)
-$color='#8FBC8F';
-elseif($status==159)
-$color='#8B3626';
-elseif($status==162)
-$color='#1E90FF';
-elseif($status==157)
-$color='#FF0000';
+    for ($i = 0; $i <= count($name) - 1; $i++) {
 
-// Очищаем от тегов
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+        $prod_new = strip_tags(html_entity_decode($prod[$i]));
+        $prod_new = trim($prod_new);
+        $status = substr($prod_new, 1, 1);
+        $status = ord($status);
 
-$product_sku_new=strip_tags($product_sku[$i]);
+        if ($status == 156)
+            $color = '#8FBC8F';
+        elseif ($status == 159)
+            $color = '#8B3626';
+        elseif ($status == 162)
+            $color = '#1E90FF';
+        elseif ($status == 157)
+            $color = '#FF0000';
 
-$name_new=strip_tags($name[$i]);
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 
-$price_new=strip_tags(html_entity_decode($price[$i]));
+        $product_sku_new = strip_tags($product_sku[$i]);
 
-//Правельное решение по удалению пробела в цене
-$price_new=str_replace(",",'.',$price_new);
-$price_new=preg_replace("/[^x\d|*\.]/","",$price_new);
+        $name_new = strip_tags($name[$i]);
+
+        $price_new = strip_tags(html_entity_decode($price[$i]));
+
+//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ
+        $price_new = str_replace(",", '.', $price_new);
+        $price_new = preg_replace("/[^x\d|*\.]/", "", $price_new);
 
 
-//узнаем продукт ид  по артиклу в базе сайта
-$strSQL = "SELECT product_id FROM `jos_vm_product` where product_sku='{$product_sku_new}'";
-$res =  mysql_query($strSQL);
-$id_produkt = mysql_fetch_row($res);
+//пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ  пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
+        $strSQL = "SELECT product_id FROM `jos_vm_product` where product_sku='{$product_sku_new}'";
+        $res = mysql_query($strSQL);
+        $id_produkt = mysql_fetch_row($res);
 
-//Если найдены совпадения артиклов
+//пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
-if ($id_produkt){
+        if ($id_produkt) {
 
-//Поиск цены в базе для сравнения перед обновлением
-$strSQL = 'SELECT product_price FROM `jos_vm_product_price` where product_id='."$id_produkt[0]".'';
-$res =  mysql_query($strSQL);
-$pri = mysql_fetch_row($res);
-$price_old = (int)$pri[0];
+//пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+            $strSQL = 'SELECT product_price FROM `jos_vm_product_price` where product_id=' . "$id_produkt[0]" . '';
+            $res = mysql_query($strSQL);
+            $pri = mysql_fetch_row($res);
+            $price_old = (int)$pri[0];
 
+//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+            if (($sync == 1) && ($price_old != $price_new)) {
+                $strSQL = "UPDATE `jos_vm_product_price` SET  product_price ='{$price_new}' where product_id='{$id_produkt[0]}'";
+                mysql_query($strSQL);
+//пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+                $num = $num + 1;
+            }
 
-//Обновляем цену на сайте согласно найденому ид только по кнопке
-if(($sync == 1)&&($price_old!=$price_new)){
-$strSQL = "UPDATE `jos_vm_product_price` SET  product_price ='{$price_new}' where product_id='{$id_produkt[0]}'";
-mysql_query($strSQL);
-//Для подсчета кол обновленных запесей
- $num=$num+1;
-}
+//пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+            $strSQL = 'SELECT product_price FROM `jos_vm_product_price` where product_id=' . "$id_produkt[0]" . '';
+            $res = mysql_query($strSQL);
+            $pri = mysql_fetch_row($res);
+            $price_old = (int)$pri[0];
 
-//Поиск цены в базе для вывода
-$strSQL = 'SELECT product_price FROM `jos_vm_product_price` where product_id='."$id_produkt[0]".'';
-$res =  mysql_query($strSQL);
-$pri = mysql_fetch_row($res);
-$price_old = (int)$pri[0];
+//пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
+            if ($price_old == $price_new) {
+                $color_price = '#8FBC8F';
+                $price_old = '';
+            } else {
+                $color_price = '#FF0000';
+                $price_old = '||' . $price_old;
+            }
 
-//Вывод старой цены и подсветка цен
-if($price_old==$price_new) 
-{
-$color_price='#8FBC8F';
-$price_old='';
-}
-else
-{
-$color_price='#FF0000';
-$price_old='||'.$price_old;
-}
+        } else {
+            $color_price = '#F0F8FF';
+            $price_old = '';
+        }
 
-}
-else
-{
-$color_price='#F0F8FF';
-$price_old='';
-}
-
-//Вывод на экран
+//пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 
 
-echo "<tr>";
+        echo "<tr>";
+        echo "<td>" . $product_sku_new . "</td><td bgcolor='" . $color . "'>" . $name_new . " </td>  <td bgcolor='" . $color_price . "'><b> <big>" . $price_new . " " . $price_old . " </big> </b> </td>";
+        echo "</tr>";
 
-echo "<td>".$product_sku_new."</td><td bgcolor='".$color."'>".$name_new." </td>  <td bgcolor='".$color_price."'><b> <big>".$price_new." ".$price_old." </big> </b> </td>"; 
-
-echo "</tr>";
-
-  } 
+    }
 
 
-//Вывод количества синхронизированных записей
+//пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 //echo "<tr><td > sync-" .$num. "</td></tr>"; 
 
+    echo "</td>";
+    echo " </table>";
 
 
-echo "</td>";
-echo " </table>";
-
-
-//освобождаем ресурсы
-$html->clear(); 
-unset($html);
+//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+    $html->clear();
+    unset($html);
 
 }
 
 echo " </td> </tr>  </table>";
 
-
-
-// Закрытие соединения
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 mysql_close();
-
 
 $time = microtime(true) - $start;
 printf('time - %.4F sek.', $time);
@@ -197,6 +179,3 @@ printf('time - %.4F sek.', $time);
 
 </body>
 </html>
-
-
-
